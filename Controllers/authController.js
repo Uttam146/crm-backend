@@ -57,7 +57,7 @@ exports.signUp = async (req, res) => {
             process.env.SECRET,
             { expiresIn: '1hr' },
             (err, emailToken) => {
-                const url = `http://localhost:8000/crm/confirmation/${emailToken}`
+                const url = `${process.env.SERVER_URL}/confirmation/${emailToken}`
                 const { subject, html, text } = userRegistration(user,url);
                 sendEmail([user.email], subject, html, text);
             }
