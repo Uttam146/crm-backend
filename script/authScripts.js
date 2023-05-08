@@ -1,6 +1,6 @@
 
 
-const userRegistration = (user)=>{
+const userRegistration = (user,url)=>{
 
     return {
         subject:"Registered to CRM app",
@@ -14,12 +14,12 @@ const userRegistration = (user)=>{
         You have registered successfully  with email ${user.email}
         <br/>
 
-        Your userId required at the time of login will be ${user.userId}
+        Pls click this <a href=${url}>link</a> to confirm email address
         <br/>
         <br/>
 
         Thanks & Regards 
-        CRM dev team 
+        Cluster team 
         <br/>
         <br/>
         <br/>

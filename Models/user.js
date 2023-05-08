@@ -28,6 +28,11 @@ const userSchema = new mongoose.Schema({
         required:true,
         default:userTypes.customer
     },
+    isVerified:{
+        type:Number,
+        required:false,
+        default:0
+    },
     userStatus:{
         type:String,
         required:true,

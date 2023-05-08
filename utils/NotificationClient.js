@@ -18,7 +18,7 @@ const sendEmail = (emailsIds, subject, html, text) => {
         service: 'gmail',
         auth: {
             user: process.env.EMAIL_ID,
-            pass: process.env.EMAIL_PASSWORD
+            pass: process.env.EMAIL_PASSWORD,
         }
     });
 
@@ -38,6 +38,7 @@ const sendEmail = (emailsIds, subject, html, text) => {
 
     mailTransporter.sendMail(mailDetails, function (err, data) {
         if (err) {
+            console.log(process.env.EMAIL_ID,process.env.EMAIL_PASSWORD);
             console.log("Unable to send email ", err);
         } else {
             console.log("Email sent sucessfully");
