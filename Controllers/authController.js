@@ -9,19 +9,20 @@ exports.confirmation = async (req, res) => {
     try {
         const userid = jwt.verify(req.params.token, process.env.SECRET);
         const user = await User.find({ _id: userid.id });
+        console.log(user[0].userTypes);
         // console.log(user);
         if (user) {
-            await User.findOneAndUpdate({ _id: user }, { isVerified: true })
-            if(user.userTypes === 'ADMIN'){
-                return res.redirect(`${process.env.FRONTEND_URL}/admin?token=${req.params.token}`)
-            }else if(user.userTypes === 'CUSTOMER'){
-                return res.redirect(`${process.env.FRONTEND_URL}/customer?token=${req.params.token}`)
-            }else if(user.userTypes === 'ENGINEER'){
-                return res.redirect(`${process.env.FRONTEND_URL}/engineer?token=${req.params.token}`)
+            await User.findOneAndUpdate({ _id: user }, { isVerified: true });
+            if(user[0].userTypes === 'ADMIN'){
+                res.redirect(`${process.env.FRONTEND_URL}/admin?token=${req.params.token}`)
+            }else if(user[0].userTypes == 'CUSTOMER'){
+                res.redirect(`${process.env.FRONTEND_URL}/customer?token=${req.params.token}`)
+            }else if(user[0].userTypes === 'ENGINEER'){
+                res.redirect(`${process.env.FRONTEND_URL}/engineer?token=${req.params.token}`)
             }
             
         } else {
-            return res.send('Hacker');
+            res.send('Hacker');
             //Do Something
         }
     } catch (err) {
@@ -57,7 +58,7 @@ exports.signUp = async (req, res) => {
             process.env.SECRET,
             { expiresIn: '1hr' },
             (err, emailToken) => {
-                const url = `${process.env.SERVER_URL}/confirmation/${emailToken}`
+                const url = `${process.env.SERVER_URL}/crm/confirmation/${emailToken}`
                 const { subject, html, text } = userRegistration(user,url);
                 sendEmail([user.email], subject, html, text);
             }
