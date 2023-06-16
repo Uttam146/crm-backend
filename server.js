@@ -27,6 +27,7 @@ db.once("open",()=>{
 require("./Routes/userRoutes")(app);
 require("./Routes/authRoutes")(app);
 require("./Routes/ticketRoutes")(app);
+require("./Routes/historyRoutes")(app);
 app.listen(process.env.PORT,()=>{
     console.log(`Application running on port ${process.env.PORT}`);
 })

@@ -5,9 +5,8 @@ const { userTypes } = require("../utils/constants");
 const verifyToken = (req,res,next)=> {
 
     //get the token 
-
+    
     let token = req.headers["x-access-token"];
-
     if(!token){
         return res.status(403).send({message:"No Token Provided"});
     }
@@ -17,7 +16,6 @@ const verifyToken = (req,res,next)=> {
         if(err){
             return res.status(403).send({message:"Invalid JWT token"});
         }
-
         req.userId = payload.id;
         next();
     })

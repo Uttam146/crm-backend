@@ -10,7 +10,7 @@ module.exports = {
     userStatus:{
         pending:"PENDING",
         approved:"APPROVED",
-        rejected:"REJECTED"
+        blocked:"BLOCKED"
     },
     ticketStatus:{
         open:"OPEN",
