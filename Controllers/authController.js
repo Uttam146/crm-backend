@@ -9,13 +9,13 @@ const url = require('url');
 exports.confirmation = async (req, res) => {
     try {
         const usertoken = jwt.verify(req.params.token, process.env.SECRET);
-        const user = await User.find({ userId: usertoken.userId });
+        const user = await User.findOne({ userId: usertoken.id });
         if (user) {
-            await User.findOneAndUpdate({ _id: user._id }, { isVerified: true, userStatus: 'APPROVED' });
-            if (user[0].userTypes === 'ADMIN' || user[0].userTypes === 'ENGINEER' || user[0].userTypes === 'CUSTOMER') {
+            await User.findOneAndUpdate({ userId: `${user.userId}` }, { isVerified: true, userStatus: 'APPROVED' });
+            if (user.userTypes === 'ADMIN' || user.userTypes === 'ENGINEER' || user.userTypes === 'CUSTOMER') {
                 res.redirect(`${process.env.FRONTEND_URL}/login?${req.params.token}`);
             } else {
-                res.send('Hacker');
+                res.send('Invalid Link');
             }
         }
     } catch (err) {
@@ -48,7 +48,7 @@ exports.signUp = async (req, res) => {
 
         //send the notification to the registered email that you are registered succesfully
         jwt.sign(
-            { userId: user.userId },
+            { id: user.userId },
             process.env.SECRET,
             { expiresIn: '1hr' },
             (err, emailToken) => {
@@ -80,7 +80,7 @@ exports.newsignUp = async (req, res) => {
         email: req.body.email,
         userTypes: req.body.userType,
         userStatus: status,
-        password: bcrypt.hashSync('cluster@123', 8)
+        password: bcrypt.hashSync('Cluster123', 8)
     }
 
     try {
@@ -88,7 +88,7 @@ exports.newsignUp = async (req, res) => {
 
         //send the notification to the registered email that you are registered succesfully
         jwt.sign(
-            { id: user._id },
+            { id: user.userId },
             process.env.SECRET,
             { expiresIn: '1hr' },
             (err, emailToken) => {
@@ -140,7 +140,7 @@ exports.signIn = async (req, res) => {
 exports.signInByToken = async (req, res) => {
     try {
         const { id } = jwt.verify(req.params.token, process.env.SECRET);
-        const user = await User.findOne({ _id: id });
+        const user = await User.findOne({ userId: id });
         if (user === null) {
             return res.status(400).send({ message: "Invalid link" });
         }

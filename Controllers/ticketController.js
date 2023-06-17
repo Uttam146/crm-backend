@@ -133,17 +133,16 @@ exports.updateTicketById = async (req, res) => {
 }
 
 exports.fetchAllTicketStatus = async (req, res) => {
-    const user = await User.find({ userId: req.userId });
+    const user = await User.findOne({ userId: req.userId });
     let data = [["Tickets", "Tickets Data"],
     ["Proposed", 0],
     ["Active", 0],
     ["Resolved", 0],
     ["Closed", 0]]
     let queryObject = {}
-    if (user[0].userTypes == 'CUSTOMER') {
+    if (user.userTypes == 'CUSTOMER') {
         queryObject = { requestor: user.userId };
     }
-    
     const ticket = await Ticket.find(queryObject);
     for (let key in ticket) {
         if (ticket[key].status == 'Proposed') {
@@ -163,7 +162,6 @@ exports.fetchAllTicketStatus = async (req, res) => {
 
 exports.deleteTicket = async(req,res)=>{
     const ticketId = req.params.ticketid;
-    console.log(req.params);
     try{
         await Ticket.deleteOne({ _id: ticketId });
         return res.status(200).send({ message: "Deleted Successfully" });
